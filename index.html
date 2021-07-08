@@ -2,24 +2,28 @@
 <html>
     <head>
         <title>Countdown Timer</title>
-        <meta charset ="UTF-8">
-        <meta name ="viewport" content ="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="style.css">
+        <meta charset="utf-8">
+       <!-- <meta name="viewport" content="width=device-width, initial-sacle=1.0">//-->
+        <link rel="stylesheet" href="style.css" />
     </head>
+
     <body>
+
         <div class="container">
-            <svg id="progressBarContainer" width="144" height="300">
-             <defs>
-                <pattern id="pattern1" x="0" y="0" width="12" height="12" patternUnits="userSpaceOnUse">
-                    <circle cx="5" cy="5" r="3" stroke="0" fill="white" />
-                </pattern>
-            </defs>   
-                
-                <rect id="progressBar" x="0" y="0" width="144" height="300" style="fill:url(#pattern1)" />
-            </svg>
+                <svg id="progressBarContainer" width="144" height="300">
+                    <defs>
+                        <pattern id="pattern1" x="0" y="0" width="12" height="12"  patternUnits="userSpaceOnUse">
+                            <circle cx="5" cy="5" r="3" stroke="0" fill="white"/>
+                        </pattern>
+                    </defs>
+                    <rect id="progressBar" x="0" y="0" width="144" height="300" style="fill: url(#pattern1);"/>
+                </svg>
+
+
             <div id="clock">
                 <p>Ready!</p>
             </div>
+
             <div id="content">
                 <select class="selector" id="hours">
                     <option value="0">0 hours</option>
@@ -47,7 +51,7 @@
                     <option value="22">22 hours</option>
                     <option value="23">23 hours</option>
                 </select>
-                
+
                 <select class="selector" id="minutes">
                     <option value="0">0 min</option>
                     <option value="1">1 min</option>
@@ -109,11 +113,10 @@
                     <option value="57">57 min</option>
                     <option value="58">58 min</option>
                     <option value="59">59 min</option>
-                    
-             </select>
-                
+                </select>
+
                 <select class="selector" id="seconds">
-                  <option value="0">0 sec</option>
+                    <option value="0">0 sec</option>
                     <option value="1">1 sec</option>
                     <option value="2">2 sec</option>
                     <option value="3">3 sec</option>
@@ -173,93 +176,103 @@
                     <option value="57">57 sec</option>
                     <option value="58">58 sec</option>
                     <option value="59">59 sec</option>
-                
                 </select>
-            
             </div>
+
             <div class="buttonSection">
-                 <div class="button1">
+                <div class="button1">
                     <button class="roundButton" id="start">Start</button>
                 </div>
                 <div class="button2">
                     <button class="roundButton" id="cancel">Cancel</button>
-            
                 </div>
-           </div>
+
+            </div>
         </div>
+
         <script>
-            document.getElementById("start").addEventListener('click',startTimer);
-            document.getElementById("cancel").addEventListener('click',cancelledButtonPressed);
-            
+            document.getElementById("start").addEventListener('click', startTimer);
+            document.getElementById("cancel").addEventListener('click', cancelledButtonPressed);
             var startTime;
             var endTime;
             var origTimePeriod;
             var newTimePeriod;
-            var timer;
             var cancelled = false;
             
-            function startTimer(){
-                cancelled = false;
+            function startTimer()
+            {
                 startTime = new Date();
                 endTime = getEndTime();
+                cancelled = false;
                 
-                origTimePeriod = startTime.getTime() - endTime.getTime();
+                origTimePeriod = endTime.getTime() - startTime.getTime();
                 
-                newTimePeriod = origTimePeriod;
+                newTimePeriod=origTimePeriod;
                 
-                timer = setInterval(displayCountdown,1000);
+                timer=setInterval(displayCountdown,1000);
+                
             }
             
-            function displayCountdown(){
-                var timeLeft = msToTime(newTimePeriod);
-                document.getElementById("clock").innerHTML = `<p>${timeLeft["hours"]}h ${timeLeft["minutes"]}m ${timeLeft["seconds"]}s</p>`;
+            function displayCountdown()
+            {
+                var timeLeft= msToTime(newTimePeriod);
                 
-                var newHeight = Math.floor(newTimePeriod / origTimePeriod * 100) * 3;
+                document.getElementById("clock").innerHTML=`<p>${timeLeft["hours"]}h ${timeLeft["minutes"]}m ${timeLeft["seconds"]}s</p>`;
+                
+                var newHeight = Math.floor(newTimePeriod/origTimePeriod * 100) * 3;
                 document.getElementById("progressBar").setAttribute("height", newHeight);
                 
-                newTimePeriod -= 1000;
+                newTimePeriod-=1000;
                 
-                if(newTimePeriod <0)  ||  cancelled{
-                    clearInterval(timer);
-                    document.getElementById("clock").innerHTML = "<p>complete!</p>";
-                }
+                if(newTimePeriod <0 || cancelled)
+                    {
+                        clearInterval(timer);
+                        document.getElementById("clock").innerHTML=  "<p>Complete!</p>";
+                    }
+            
             }
             
-            function cancelledButtonPressed(){
+            function cancelledButtonPressed()
+            {
                 cancelled = true;
             }
             
-            function msToTime(milliseconds){
-                var mHour = 1000 * 60 * 60;
-                var mMinute = 1000 * 60;
-                var mSecond = 1000;
+            function msToTime(milliseconds)
+            {
+                var mHour=1000 * 60 * 60;
+                var mMinutes=1000* 60;
+                var mSecs=1000;
                 
-                var hours = Math.floor(milliseconds / mHour);
-                var minutes = Math.floor(milliseconds % mHour / mMinute);
-                var seconds = Math.floor(milliseconds % mMinute / mSecond);
+                var hours = Math.floor(milliseconds/mHour);
+                var minutes = Math.floor((milliseconds % mHour)/mMinutes);
+                var seconds = Math.floor((milliseconds % mMinutes)/mSecs);
                 
-                var time = [];
-                time["hours"] = hours;
-                time["minutes"] = minutes;
-                time["seconds"] = seconds;
+                var time=[];
+                time["hours"]=hours;
+                time["minutes"]=minutes;
+                time["seconds"]=seconds;
                 
                 return time;
             }
             
-            function getEndTime(){
-                var dt = new Date();
+
+            function getEndTime()
+            {
+                var dt=new Date();
+
+                var hours=parseInt(document.getElementById("hours").value);
+                var minutes=parseInt(document.getElementById("minutes").value);
+                var seconds=parseInt(document.getElementById("seconds").value);
                 
-                var hours = parseInt(document.getElementById("hours").value);
-                var minutes = parseInt(document.getElementById("minutes").value);
-                var seconds = parseInt(document.getElementById("seconds").value);
+                dt.setHours(dt.getHours()+hours);
+                dt.setMinutes(dt.getMinutes()+minutes);
+                dt.setSeconds(dt.getSeconds()+seconds);
                 
-                
-                dt.setHours(dt.getHours() + hours);
-                dt.setMinutes(dt.getMinutes() + minutes);
-                dt.setSeconds(dt.getSeconds() + seconds);
-                return(dt);
+                return dt;
             }
-        
+
         </script>
+
     </body>
+
 </html>
